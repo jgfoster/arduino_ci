@@ -3,6 +3,7 @@
 #include <avr/io.h>
 #include "WString.h"
 #include "PinHistory.h"
+#include "Event.h"
 
 // random
 void randomSeed(unsigned long seed);
@@ -56,6 +57,7 @@ class GodmodeState {
     struct PortDef spi;
 
     void resetPins() {
+      PinEvent::eraseHistory();
       for (int i = 0; i < MOCK_PINS_COUNT; ++i) {
         digitalPin[i].reset(LOW);
         analogPin[i].reset(0);

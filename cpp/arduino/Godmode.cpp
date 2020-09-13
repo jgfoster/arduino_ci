@@ -60,6 +60,7 @@ long random(long vmin, long vmax)
 void digitalWrite(unsigned char pin, unsigned char val) {
   GodmodeState* godmode = GODMODE();
   godmode->digitalPin[pin] = val;
+  new DigitalPinEvent(pin, val);
 }
 
 int digitalRead(unsigned char pin) {
@@ -70,6 +71,7 @@ int digitalRead(unsigned char pin) {
 void analogWrite(unsigned char pin, int val) {
   GodmodeState* godmode = GODMODE();
   godmode->analogPin[pin] = val;
+  new AnalogPinEvent(pin, val);
 }
 
 int analogRead(unsigned char pin) {

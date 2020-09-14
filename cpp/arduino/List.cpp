@@ -69,6 +69,7 @@ void List<T>::resize(size_t size) {
     delete array;
     array = temp;
     temp = nullptr;
+    capacity = size;
 }
 
 template <class T>

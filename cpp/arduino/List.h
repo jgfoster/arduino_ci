@@ -16,6 +16,7 @@ class List {
         ~List();
         void reset();
         size_t size();
+        bool isEmpty();
         T at(size_t index);
         T atPut(size_t index, T item);
         T pushBack(T item);

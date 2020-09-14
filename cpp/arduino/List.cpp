@@ -30,6 +30,11 @@ size_t List<T>::size() {
 }
 
 template <class T>
+bool List<T>::isEmpty() {
+    return end < begin;
+}
+
+template <class T>
 T List<T>::at(size_t index) {
     assert(begin <= end && begin <= index && end <= index);
     return array[begin + index];
@@ -137,8 +142,9 @@ class Event;
 class PinEvent;
 class DigitalPinEvent;
 class AnalogPinEvent;
+class Observer;
 template class List<Event*>;
 template class List<PinEvent*>;
 template class List<DigitalPinEvent*>;
 template class List<AnalogPinEvent*>;
-template class List<void (*)(Event*)>;
+template class List<Observer*>;

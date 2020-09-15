@@ -1,7 +1,7 @@
 #pragma once
 #include <assert.h>
 #include <stdexcept>
-// #include <iostream>
+#include <iostream>
 
 template <class T>
 class List {
@@ -70,7 +70,7 @@ bool List<T>::isEmpty() {
 template <class T>
 T List<T>::at(long index) {
     if (!((begin <= end) && (0 <= index) && (index < size()))) {
-        throw std::runtime_error("Index out of range!");
+        throw std::runtime_error("List<T>::at() - Index out of range!");
     }
     return array[begin + index];
 }
@@ -78,7 +78,7 @@ T List<T>::at(long index) {
 template <class T>
 T List<T>::atPut(long index, T item) {
     if (!((begin <= end) && (0 <= index) && (index < size()))) {
-        throw std::runtime_error("Index out of range!");
+        throw std::runtime_error("List<T>::atPut() - Index out of range!");
     }
     array[begin + index] = item;
     return item;
@@ -176,7 +176,7 @@ template <class T>
 T List<T>::remove(T item) {
     long i = indexOf(item);
     if (!(0 <= i)) {
-        throw std::runtime_error("Index out of range!");
+        throw std::runtime_error("List<T>::remove() - Index out of range!");
     }
     return removeAt(i);
 }

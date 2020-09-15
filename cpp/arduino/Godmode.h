@@ -57,7 +57,8 @@ class GodmodeState {
     struct PortDef spi;
 
     void resetPins() {
-      PinEvent::eraseHistory();
+      DigitalPinEvent::reset();
+      AnalogPinEvent::reset();
       for (int i = 0; i < MOCK_PINS_COUNT; ++i) {
         digitalPin[i].reset(LOW);
         analogPin[i].reset(0);

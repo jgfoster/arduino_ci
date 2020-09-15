@@ -1,12 +1,11 @@
+#include <iostream>
 #include "Event.h"
 
 extern unsigned long micros();
 
-unsigned long Event::_lastId;
+long Event::_lastId;
 List<Event*> Event::events; 
 List<Observer*> Event::eventObservers;
-List<PinEvent*> PinEvent::pinEvents; 
-List<Observer*> PinEvent::pinEventObservers;
 List<DigitalPinEvent*> DigitalPinEvent::digitalPinEvents; 
 List<Observer*> DigitalPinEvent::digitalPinEventObservers;
 List<AnalogPinEvent*> AnalogPinEvent::analogPinEvents; 
@@ -29,59 +28,26 @@ void Event::addObserver(observerFunction_t function) {
     eventObservers.pushBack(observer);
 }
 
-void Event::removeObserver(observerFunction_t observer) {
-    for (size_t i = 0; i < eventObservers.size(); ++i) {
-        if (eventObservers.at(i)->function == observer) {
+void Event::removeObserver(observerFunction_t function) {
+    for (long i = eventObservers.size() - 1; i >= 0; --i) {
+        if (eventObservers.at(i)->function == function) {
             delete eventObservers.removeAt(i);
-            return;
         }
     }
-    assert(false);
 }
 
 void Event::notify() {
-    for (size_t i = 0; i < eventObservers.size(); ++i) {
+    for (long i = 0; i < eventObservers.size(); ++i) {
         Observer* observer = eventObservers.at(i);
         observerFunction_t function = observer->function;
         (*function)(this);
     }
 }
 
-PinEvent::PinEvent(byte pin) : Event() {
+// ======================= DigitalPinEvent =======================
+
+DigitalPinEvent::DigitalPinEvent(byte pin, bool value) : Event() {
     _pin = pin;
-    pinEvents.pushBack(this);
-}
-
-PinEvent::~PinEvent() {
-    _pin = 0;
-    pinEvents.remove(this);
-}
-
-void PinEvent::addObserver(observerFunction_t function) {
-    Observer* observer = new Observer(function);
-    pinEventObservers.pushBack(observer);
-}
-
-void PinEvent::removeObserver(observerFunction_t observer) {
-    for (size_t i = 0; i < pinEventObservers.size(); ++i) {
-        if (pinEventObservers.at(i)->function == observer) {
-            delete pinEventObservers.removeAt(i);
-            return;
-        }
-    }
-    assert(false);
-}
-
-void PinEvent::notify() {
-    for (size_t i = 0; i < pinEventObservers.size(); ++i) {
-        Observer* observer = pinEventObservers.at(i);
-        observerFunction_t function = observer->function;
-        (*function)((Event*) this);
-    }
-    Event::notify();
-}
-
-DigitalPinEvent::DigitalPinEvent(byte pin, bool value) : PinEvent(pin) {
     _value = value;
     digitalPinEvents.pushBack(this);
 }
@@ -93,25 +59,22 @@ DigitalPinEvent::~DigitalPinEvent() {
 
 void DigitalPinEvent::addObserver(observerFunction_t function, byte pin, pinEventType_t eventType) {
     Observer* observer = new Observer(function);
-    digitalPinEventObservers.pushBack(observer);
     observer->details.digitalPin.pin = pin;
     observer->details.digitalPin.eventType = eventType;
     digitalPinEventObservers.pushBack(observer);
 }
 
-void DigitalPinEvent::removeObserver(observerFunction_t observer) {
-    for (size_t i = 0; i < digitalPinEventObservers.size(); ++i) {
-        if (digitalPinEventObservers.at(i)->function == observer) {
+void DigitalPinEvent::removeObserver(observerFunction_t function) {
+    for (long i = digitalPinEventObservers.size() - 1; i >= 0; --i) {
+        if (digitalPinEventObservers.at(i)->function == function) {
             delete digitalPinEventObservers.removeAt(i);
-            return;
         }
     }
-    assert(false);
 }
 
 DigitalPinEvent* DigitalPinEvent::getPriorEventForPin() {
     bool foundThis = false;
-    for (size_t i = digitalPinEvents.size() - 1; i >= 0; --i) {
+    for (long i = digitalPinEvents.size() - 1; i >= 0; --i) {
         DigitalPinEvent* each = digitalPinEvents.at(i);
         if (foundThis) {
             if (this->_pin == each->_pin) {
@@ -127,7 +90,7 @@ DigitalPinEvent* DigitalPinEvent::getPriorEventForPin() {
 }
 
 void DigitalPinEvent::notify() {
-    for (size_t i = 0; i < digitalPinEventObservers.size(); ++i) {
+    for (long i = 0; i < digitalPinEventObservers.size(); ++i) {
         Observer* observer = digitalPinEventObservers.at(i);
         observerFunction_t function = observer->function;
         byte pin = observer->details.digitalPin.pin;
@@ -145,16 +108,31 @@ void DigitalPinEvent::notify() {
             }
         }
     }
-    PinEvent::notify();
+    Event::notify();
 }
 
+// We have a separate factory method because we don't want the
+// notification to happen in the superclass with an incomplete object
 DigitalPinEvent* DigitalPinEvent::newEvent(byte pin, bool value) {
     DigitalPinEvent* event = new DigitalPinEvent(pin, value);
     event->notify();
     return event;
 }
 
-AnalogPinEvent::AnalogPinEvent(byte pin, int value) : PinEvent(pin) {
+bool DigitalPinEvent::read(byte pin) {
+    for (long i = digitalPinEvents.size() - 1; i >= 0; --i) {
+        DigitalPinEvent* each = digitalPinEvents.at(i);
+        if (each->getPin() == pin) {
+            return each->getValue();
+        }
+    }
+    return false;
+}
+
+// ======================= AnalogPinEvent =======================
+
+AnalogPinEvent::AnalogPinEvent(byte pin, int value) : Event() {
+    _pin = pin;
     _value = value;
     analogPinEvents.pushBack(this);
 }
@@ -169,26 +147,26 @@ void AnalogPinEvent::addObserver(observerFunction_t function) {
     analogPinEventObservers.pushBack(observer);
 }
 
-void AnalogPinEvent::removeObserver(observerFunction_t observer) {
-    for (size_t i = 0; i < analogPinEventObservers.size(); ++i) {
-        if (analogPinEventObservers.at(i)->function == observer) {
+void AnalogPinEvent::removeObserver(observerFunction_t function) {
+    for (long i = analogPinEventObservers.size() - 1; i >= 0; --i) {
+        if (analogPinEventObservers.at(i)->function == function) {
             delete analogPinEventObservers.removeAt(i);
-            return;
         }
     }
-    assert(false);
 }
 
 void AnalogPinEvent::notify() {
-    for (size_t i = 0; i < analogPinEventObservers.size(); ++i) {
+    for (long i = 0; i < analogPinEventObservers.size(); ++i) {
         Observer* observer = analogPinEventObservers.at(i);
         observerFunction_t function = observer->function;
         (*function)((Event*) this);
     }
-    PinEvent::notify();
+    Event::notify();
 }
 
-AnalogPinEvent* AnalogPinEvent::newEvent(byte pin, bool value) {
+// We have a separate factory method because we don't want the
+// notification to happen in the superclass with an incomplete object
+AnalogPinEvent* AnalogPinEvent::newEvent(byte pin, int value) {
     AnalogPinEvent* event = new AnalogPinEvent(pin, value);
     event->notify();
     return event;

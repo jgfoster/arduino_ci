@@ -134,9 +134,6 @@ public:
   uint8_t requestFrom(uint8_t address, size_t quantity) {
     return requestFrom(address, quantity, true);
   }
-  uint8_t requestFrom(int address, int quantity) {
-    return requestFrom((uint8_t)address, (size_t)quantity);
-  }
   uint8_t requestFrom(int address, int quantity, int stop) {
     return requestFrom((uint8_t)address, (size_t)quantity, (bool)stop);
   }

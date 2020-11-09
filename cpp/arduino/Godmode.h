@@ -30,6 +30,14 @@ unsigned long micros();
   #define NUM_SERIAL_PORTS 0
 #endif
 
+// These definitions allow the following to compile (see issue #193):
+// https://github.com/arduino-libraries/Ethernet/blob/master/src/utility/w5100.h:341
+// add padding because some boards (__MK20DX128__) offset from the given address
+#define MMAP_PORTS_SIZE (MOCK_PINS_COUNT + 256)
+#define digitalPinToBitMask(pin)  (1)
+#define digitalPinToPort(pin)     (pin)
+#define portOutputRegister(port)  (GODMODE()->pMmapPort(port))
+
 // different EEPROM implementations have different macros that leak out
 #if !defined(EEPROM_SIZE) && defined(E2END) && (E2END)
   // public value indicates that feature is available
@@ -39,7 +47,7 @@ unsigned long micros();
 #else
   // feature is not available but we want to have the array so other code compiles
   #define _EEPROM_SIZE (0)
-#endif 
+#endif
 
 class GodmodeState {
   private:

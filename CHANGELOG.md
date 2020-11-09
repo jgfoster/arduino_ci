@@ -11,18 +11,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Add stubs for `Client.h`, `IPAddress.h`, `Printable.h`, `Server.h`, and `Udp.h` 
 - Add support for `digitalPinToPort()`, `digitalPinToBitMask()`, and `portOutputRegister()`
 - Support for mock EEPROM (but only if board supports it)
+- `arduino_ci_remote.rb` CLI switch `--skip-examples-compilation`
+- `CppLibrary.header_files` to find header files
+- `LibraryProperties` to read metadata from Arduino libraries
+- `CppLibrary.library_properties_path`, `CppLibrary.library_properties?`, `CppLibrary.library_properties` to expose library properties of a Cpp library
+- `CppLibrary.arduino_library_dependencies` to list the dependent libraries specified by the library.properties file
+- `CppLibrary.print_stack_dump` prints stack trace dumps (on Windows specifically) to the console if encountered
 
 ### Changed
 - Move repository from https://github.com/ianfixes/arduino_ci to https://github.com/Arduino-CI/arduino_ci
+- `CppLibrary` functions returning C++ header or code files now respect the 1.0/1.5 library specification
 - Revise math macros to avoid name clashes
-
-### Deprecated
-- Deprecated `arduino_ci_remote.rb` in favor of `arduino_ci.rb`
-
-### Removed
 
 ### Fixed
 - Don't define `ostream& operator<<(nullptr_t)` if already defined by Apple
+- `CppLibrary.in_tests_dir?` no longer produces an error if there is no tests directory
+- The definition of the `_SFR_IO8` macro no longer produces errors about rvalues
+
+### Deprecated
+- `arduino_ci_remote.rb` in favor of `arduino_ci.rb`
+- `arduino_ci_remote.rb` CLI switch `--skip-compilation`
+
+### Removed
 
 ### Security
 

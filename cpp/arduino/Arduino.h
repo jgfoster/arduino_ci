@@ -5,6 +5,7 @@ Mock Arduino.h library.
 Where possible, variable names from the Arduino library are used to avoid conflicts
 
 */
+
 // Chars and strings
 
 #include "ArduinoDefines.h"
@@ -72,5 +73,3 @@ inline unsigned int makeWord(unsigned int w) { return w; }
 inline unsigned int makeWord(unsigned char h, unsigned char l) { return (h << 8) | l; }
 
 #define word(...) makeWord(__VA_ARGS__)
-
-

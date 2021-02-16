@@ -374,9 +374,13 @@ module ArduinoCI
     def run_gcc(gcc_binary, *args, **kwargs)
       full_args = [gcc_binary] + args
       @last_cmd = " $ #{full_args.join(' ')}"
+      puts("JGF1", @last_cmd)
       ret = Host.run_and_capture(*full_args, **kwargs)
+      puts("JGF2", ret)
       @last_err = ret[:err]
       @last_out = ret[:out]
+      puts("JGF3", @last_err)
+      puts("JGF4", @last_out)
       ret[:success]
     end
 
@@ -494,7 +498,7 @@ module ArduinoCI
       executable = Pathname.new("unittest_#{base}.bin").expand_path
       File.delete(executable) if File.exist?(executable)
       arg_sets = []
-      arg_sets << ["-std=c++17", "-o", executable.to_s, "-DARDUINO=100"]
+      arg_sets << ["-std=c++0x", "-o", executable.to_s, "-DARDUINO=100"]
       if libasan?(gcc_binary)
         arg_sets << [ # Stuff to help with dynamic memory mishandling
           "-g", "-O1",

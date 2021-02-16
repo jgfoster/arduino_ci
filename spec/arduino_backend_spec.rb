@@ -14,9 +14,9 @@ RSpec.describe ArduinoCI::ArduinoBackend do
   after(:each) do |example|
     if example.exception
       puts "Last message: #{backend.last_msg}"
-      puts "=1========= Stdout:"
+      puts "========== Stdout:"
       puts backend.last_out
-      puts "=1========= Stderr:"
+      puts "========== Stderr:"
       puts backend.last_err
     end
   end

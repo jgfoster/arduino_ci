@@ -75,6 +75,7 @@ RSpec.describe "TestSomething C++" do
           before(:all) do
             @cpp_library = backend.install_local_library(cpp_lib_path)
             @exe = @cpp_library.build_for_test_with_configuration(path, [], compiler, config.gcc_config("uno"))
+            puts("JGF6", @cpp_library.last_cmd)
           end
 
           # extra debug for c++ failures
@@ -85,6 +86,7 @@ RSpec.describe "TestSomething C++" do
               puts @cpp_library.last_out
               puts "=3========= Stderr:"
               puts @cpp_library.last_err
+              puts "=3========= DONE WITH", each
             end
           end
 

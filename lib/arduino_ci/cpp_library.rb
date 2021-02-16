@@ -374,13 +374,9 @@ module ArduinoCI
     def run_gcc(gcc_binary, *args, **kwargs)
       full_args = [gcc_binary] + args
       @last_cmd = " $ #{full_args.join(' ')}"
-      puts("JGF1", @last_cmd)
       ret = Host.run_and_capture(*full_args, **kwargs)
-      puts("JGF2", ret)
       @last_err = ret[:err]
       @last_out = ret[:out]
-      puts("JGF3", @last_err)
-      puts("JGF4", @last_out)
       ret[:success]
     end
 
@@ -517,7 +513,6 @@ module ArduinoCI
       args = arg_sets.flatten(1)
       return nil unless run_gcc(gcc_binary, *args)
 
-      puts("JGF5", @last_cmd)
       artifacts << executable
       executable
     end

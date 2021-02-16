@@ -75,18 +75,17 @@ RSpec.describe "TestSomething C++" do
           before(:each) do
             @cpp_library = backend.install_local_library(cpp_lib_path)
             @exe = @cpp_library.build_for_test_with_configuration(path, [], compiler, config.gcc_config("uno"))
-            puts("JGF6", @cpp_library.last_cmd)
           end
 
           # extra debug for c++ failures
           after(:each) do |example|
             if example.exception
               puts "Last command: #{@cpp_library.last_cmd}"
-              puts "=3========= Stdout:"
+              puts "========== Stdout:"
               puts @cpp_library.last_out
-              puts "=3========= Stderr:"
+              puts "========== Stderr:"
               puts @cpp_library.last_err
-              puts "=3========= DONE WITH"
+              puts "=========="
             end
           end
 

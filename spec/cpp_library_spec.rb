@@ -259,9 +259,9 @@ RSpec.describe ArduinoCI::CppLibrary do
     after(:each) do |example|
       if example.exception
         puts "Last command: #{@cpp_library.last_cmd}"
-        puts "========== Stdout:"
+        puts "=2========= Stdout:"
         puts @cpp_library.last_out
-        puts "========== Stderr:"
+        puts "=2========= Stderr:"
         puts @cpp_library.last_err
       end
     end

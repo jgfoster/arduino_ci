@@ -81,9 +81,9 @@ RSpec.describe "TestSomething C++" do
           after(:each) do |example|
             if example.exception
               puts "Last command: #{@cpp_library.last_cmd}"
-              puts "========== Stdout:"
+              puts "=3========= Stdout:"
               puts @cpp_library.last_out
-              puts "========== Stderr:"
+              puts "=3========= Stderr:"
               puts @cpp_library.last_err
             end
           end

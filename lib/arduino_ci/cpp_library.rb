@@ -516,6 +516,7 @@ module ArduinoCI
       arg_sets << [test_file.to_s]
       args = arg_sets.flatten(1)
       return nil unless run_gcc(gcc_binary, *args)
+      
       puts("JGF5", @last_cmd)
       artifacts << executable
       executable

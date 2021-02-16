@@ -86,7 +86,7 @@ RSpec.describe "TestSomething C++" do
               puts @cpp_library.last_out
               puts "=3========= Stderr:"
               puts @cpp_library.last_err
-              puts "=3========= DONE WITH", each
+              puts "=3========= DONE WITH"
             end
           end
 

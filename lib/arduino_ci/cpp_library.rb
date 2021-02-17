@@ -510,9 +510,7 @@ module ArduinoCI
       arg_sets << test_args(full_dependencies, ci_gcc_config)
       arg_sets << cpp_files_libraries(full_dependencies).map(&:to_s)
       arg_sets << [test_file.to_s]
-      if ArduinoCI::Host.os == "linux"
-        arg_sets << ["-lstdc++fs"]
-      end
+      arg_sets << ["-lstdc++fs"] if ArduinoCI::Host.os == "linux"
 
       args = arg_sets.flatten(1)
       return nil unless run_gcc(gcc_binary, *args)

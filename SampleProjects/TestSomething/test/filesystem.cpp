@@ -4,11 +4,15 @@
 
 namespace fs = std::experimental::filesystem;
 
-unittest(exists)
+unittest(filesystem)
 {
   assertTrue(fs::exists("."));
-  std::string path = fs::current_path();
-  assertEqual("/home/runner/work/arduino_ci/arduino_ci/SampleProjects/TestSomething", path);
+  std::string expected = std::string("/home/runner/work/arduino_ci/arduino_ci");
+  std::string actual = fs::current_path();
+  int size = expected.size();
+  assertTrue(path.size() >= size);
+  path = path.substr(0, size);
+  assertEqual("/home/runner/work/arduino_ci/arduino_ci", path);
 }
 
 unittest_main()

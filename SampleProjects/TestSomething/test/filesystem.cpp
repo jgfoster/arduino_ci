@@ -8,7 +8,7 @@ unittest(exists)
 {
   assertTrue(fs::exists("."));
   std::string path = fs::current_path();
-  std::cout << "path = " << path << std::endl;
+  assertEqual("/home/runner/work/arduino_ci/arduino_ci", path);
 }
 
 unittest_main()

@@ -494,7 +494,7 @@ module ArduinoCI
       executable = Pathname.new("unittest_#{base}.bin").expand_path
       File.delete(executable) if File.exist?(executable)
       arg_sets = []
-      arg_sets << ["-std=c++0x", "-o", executable.to_s, "-DARDUINO=100", "-lstdc++fs"]
+      arg_sets << ["-std=c++0x", "-o", executable.to_s, "-DARDUINO=100"]
       if libasan?(gcc_binary)
         arg_sets << [ # Stuff to help with dynamic memory mishandling
           "-g", "-O1",
@@ -510,6 +510,7 @@ module ArduinoCI
       arg_sets << test_args(full_dependencies, ci_gcc_config)
       arg_sets << cpp_files_libraries(full_dependencies).map(&:to_s)
       arg_sets << [test_file.to_s]
+      arg_sets << ["-lstdc++fs"]
       args = arg_sets.flatten(1)
       return nil unless run_gcc(gcc_binary, *args)
 
